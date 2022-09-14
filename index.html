@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html ng-app="ASMSimulator">
 <head>
-    <title>Simple 8-bit Assembler Simulator in Javascript</title>
+    <title>Arq-registro-x86</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/style.css">
@@ -9,7 +9,7 @@
     <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
 </head>
 <body ng-controller="Ctrl">
-    <a href="https://github.com/Schweigi/assembler-simulator"><img style="z-index:1001;position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
+    <a href="https://github.com/ruiz-jose/arq-registro-x86"><img style="z-index:1001;position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
     <nav class="navbar navbar-inverse" role="navigation" style="background-color:#428BCA;border:0px;border-radius:0px;">
         <div class="container">
             <div class="navbar-header">
@@ -21,7 +21,7 @@
                 <button type="button" class="btn btn-default navbar-btn" ng-click="reset()">Reset</button>
             </div>
             <div class="navbar-header navbar-right">
-                <a class="navbar-brand" style="color:#FFFFFF">Simple 8-bit Assembler Simulator</a>
+                <a class="navbar-brand" style="color:#FFFFFF">Arquitectura registro x86</a>
             </div>
         </div>
     </nav>
@@ -42,7 +42,7 @@
                                       tab-support
                                       select-line
                                       ng-model="code"></textarea>
-                            <button type="button" class="btn btn-default" ng-click="assemble()">Assemble</button>
+                            <button type="button" class="btn btn-default" ng-click="assemble()">Cargar en memoria</button>
                         </form>
                     </div>
                 </div>
@@ -62,10 +62,10 @@
                 </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h4 class="panel-title">CPU & Memory</h4>
+                        <h4 class="panel-title">CPU & Memoria</h4>
                     </div>
                     <div class="panel-body">
-                        <p class="text-muted">Registers / Flags</p>
+                        <p class="text-muted">Registros / Flags</p>
                         <table class="table table-condensed table-striped">
                             <thead>
                                 <tr>
