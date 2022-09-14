@@ -11,9 +11,9 @@ Press Help inside the simulator to see an overview about the supported instructi
 - 256 posiciones de memoria de 1 byte cada una
 - Una pantalla de salida
 
-### How to build
-Make sure you have <a href="http://www.gruntjs.com/" target="_blank">Grunt</a> installed to compile the `asmsimulator.js` script.
-Run `grunt` to build the project.
+### Para desplegar
+Instalar <a href="http://www.gruntjs.com/" target="_blank">Grunt</a> para compilar el archivo script `asmsimulator.js`.
+Run `grunt` para construir el proyecto.
 
 ### Background
 A technical introduction is available on my blog: [www.mschweighauser.com](https://www.mschweighauser.com/make-your-own-assembler-simulator-in-javascript-part1/).
