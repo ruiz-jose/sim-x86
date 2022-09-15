@@ -9,7 +9,7 @@ Press Help inside the simulator to see an overview about the supported instructi
 La computadora virtual consta de los siguientes componentes:
 - Memoria RAM (256 bytes). La memoria contiene las instrucciones y datos del programa. Tiene 256 posiciones de memoria de 1 byte cada una. todos los valores deben estar entre 0 y 255.
 - CPU de 8 bits. La CPU realiza el ciclo de instruccion: captar de memoria y ejecutar.
-- Salida de consola. La salida de la consola utiliza la asignación de memoria y asigna una parte específica de la memoria a la consola. Por lo tanto, escribir en la salida de la consola es tan simple como escribir en una ubicación de memoria específica.
+- Salida de consola. Puede mostrar 24 caracteres y asignará los últimos 24 bytes de la memoria RAM a la salida. Por lo tanto, para que el programa escriba algo en la salida, todo lo que se debe hacer es escribir los datos en los últimos 24 bytes de la memoria. Esto significa mapeo directo a memoria RAM.
 
 ### la cpu
 El corazón del simulador es la CPU. La CPU consta de 4 registros de propósito general ( A, B, C y D ) y su trabajo es mantener los valores necesarios para ejecutar una instrucción ¿Cómo sabe la CPU qué ejecutar? Para ello, utilizamos un puntero de instrucción ( IP ). Técnicamente, la IP es solo otro registro con alguna funcionalidad adicional. La IP mantiene la ubicación de la siguiente instrucción en la memoria y en cada ciclo de la CPU, la CPU toma esta instrucción y la ejecuta.
