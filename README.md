@@ -7,7 +7,7 @@ Press Help inside the simulator to see an overview about the supported instructi
 
 ## Caracteristicas
 La computadora virtual consta de los siguientes componentes:
-- Memoria RAM (256 bytes). La memoria contiene las instrucciones y datos del programa. Tiene 256 posiciones de memoria de 1 byte cada una.
+- Memoria RAM (256 bytes). La memoria contiene las instrucciones y datos del programa. Tiene 256 posiciones de memoria de 1 byte cada una. todos los valores deben estar entre 0 y 255.
 - CPU de 8 bits. La CPU realiza el ciclo de instruccion: captar de memoria y ejecutar.
 - Salida de consola. La salida de la consola utiliza la asignación de memoria y asigna una parte específica de la memoria a la consola. Por lo tanto, escribir en la salida de la consola es tan simple como escribir en una ubicación de memoria específica.
 
