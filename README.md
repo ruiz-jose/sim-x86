@@ -12,7 +12,7 @@ Press Help inside the simulator to see an overview about the supported instructi
 - Una pantalla de salida
 
 ### Para desplegar
-Instalar <a href="http://www.gruntjs.com/" target="_blank">Grunt</a> para compilar el archivo script `asmsimulator.js`.
+Instalar <a href="http://www.gruntjs.com/" target="_blank">Grunt</a>.
 Run `grunt` para construir el proyecto.
 
 ### Background
