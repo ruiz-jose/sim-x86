@@ -22,6 +22,20 @@ Si bien esta pequeña funcionalidad es suficiente para ejecutar algunos programa
 
 Por último, pero no menos importante, actualizamos nuestra CPU con un registro de puntero de pila. El puntero de pila ( SP ) como el nombre ya da puntos a la posición actual de la pila en la memoria. Puede ser incrementado y decrementado por el programa para almacenar datos e implementar funciones.
 
+### Formato de instruccion
+Por lo general una instrucción contiene el código de operación y sus operandos (parámetros). El primer operando suele ser el destino y el segundo es la fuente. Si una instrucción tiene solo un operando, este operando es destino y fuente a la vez.
+
+Por ejemplo: 
+[Opcode] [Operand1] [Operand2]
+ADD     reg,       reg
+ADD     reg,       [address]
+ADD     reg,       constant
+
+### Ciclo de instruccion
+El código es realmente sencillo. Lee la siguiente instrucción de la memoria con la ayuda de la IP. Luego, se captan los operandos de la instrucción de la memoria y finalmente se ejecuta la instrucción.
+Una instruccion con dos operandos requiere 3 bytes de memoria, 1 para el codigo de operacion de instrucción y dos para cada operando. Por lo tanto, el puntero de instrucción (IP) se incrementa en 3 en lugar de 1 para este tipo de instrucción.
+
+
 ## Para desplegar
 Instalar <a href="http://www.gruntjs.com/" target="_blank">Grunt</a>.
 Run `grunt` para construir el proyecto.
