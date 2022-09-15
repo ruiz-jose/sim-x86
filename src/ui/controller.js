@@ -17,7 +17,7 @@ app.controller('Ctrl', ['$document', '$scope', '$timeout', 'cpu', 'memory', 'ass
     $scope.outputStartIndex = 232;
 
    // $scope.code = "; Simple example\n; Writes Hello World to the output\n\n	JMP start\nhello: DB \"Hello World!\" ; Variable\n       DB 0	; String terminator\n\nstart:\n	MOV C, hello    ; Point to var \n	MOV D, 232	; Point to output\n	CALL print\n        HLT             ; Stop execution\n\nprint:			; print(C:*from, D:*to)\n	PUSH A\n	PUSH B\n	MOV B, 0\n.loop:\n	MOV A, [C]	; Get char from var\n	MOV [D], A	; Write to output\n	INC C\n	INC D  \n	CMP B, [C]	; Check if end\n	JNZ .loop	; jump if not\n\n	POP B\n	POP A\n	RET";
-   $scope.code = "; Ejemplo simple\n; x=3 , y=2, z=0\n;Operacion z = y + x\n\n	 MOV A, x    ; copia contenido de x al registro A\n	ADD A, y     ; A = A + x\n MOV z, A	     ; A = A + x\n HLT    ; Detiene ejecucion\n\n	; Defino Datos\n x: DB 3 ; Variable x=3\n y DB 2\n z DB 0";
+   $scope.code = "; Ejemplo simple\n; x=3 , y=2, z=0\n;Operacion z = y + x\n\nMOV A, x    ; copia contenido de x al registro A\n	ADD A, y     ; A = A + x\n MOV z, A	     ; A = A + x\n HLT    ; Detiene ejecucion\n\n	; Defino Datos\n x: DB 3 ; Variable x=3\n y DB 2\n z DB 0";
 
     $scope.reset = function () {
         cpu.reset();
