@@ -1366,7 +1366,7 @@ var app = angular.module('ASMSimulator', []);
     $scope.outputStartIndex = 232;
 
    // $scope.code = "; Simple example\n; Writes Hello World to the output\n\n	JMP start\nhello: DB \"Hello World!\" ; Variable\n       DB 0	; String terminator\n\nstart:\n	MOV C, hello    ; Point to var \n	MOV D, 232	; Point to output\n	CALL print\n        HLT             ; Stop execution\n\nprint:			; print(C:*from, D:*to)\n	PUSH A\n	PUSH B\n	MOV B, 0\n.loop:\n	MOV A, [C]	; Get char from var\n	MOV [D], A	; Write to output\n	INC C\n	INC D  \n	CMP B, [C]	; Check if end\n	JNZ .loop	; jump if not\n\n	POP B\n	POP A\n	RET";
-   $scope.code = "; Sitaxis NASM: ADD A, [x] --> para está sintaxis [x] accede al contenido dde memoria RAM dada por x, sino retorna la direccion de memoria RAM donde se guarda x  \n; Sitaxis Ejemplo simple\n; x=3 , y=2, z=0\n;Operación z = y + x\n\nMOV A, [x]    ; copia contenido de x al registro A\nADD A, [y]     ; A = A + y\nMOV [z], A     ; z <-- A\nHLT    ; Detiene ejecución\n\n; Defino Datos\nx: DB 3 ; Variable x=3\ny: DB 2\nz: DB 0";
+   $scope.code = "; Sintaxis NASM: entonces la instrucción ADD A, [x] --> copia el contenido de memoria RAM dada por x, la instrucción ADD A, x copia la direccion de memoria RAM donde se guarda x  \n; Sitaxis Ejemplo simple\n; x=3 , y=2, z=0\n;Operación z = y + x\n\nMOV A, [x]    ; copia contenido de x al registro A\nADD A, [y]     ; A = A + y\nMOV [z], A     ; z <-- A\nHLT    ; Detiene ejecución\n\n; Defino Datos\nx: DB 3 ; Variable x=3\ny: DB 2\nz: DB 0";
 
     $scope.reset = function () {
         cpu.reset();
