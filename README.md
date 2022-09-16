@@ -27,9 +27,15 @@ Por lo general una instrucción contiene el código de operación y sus operando
 
 Por ejemplo: 
 [Opcode] [Operand1] [Operand2]
+
 ADD     reg,       reg
+
 ADD     reg,       [address]
+
+ADD     reg,       address
+
 ADD     reg,       constant
+
 
 ### Ciclo de instruccion
 El código es realmente sencillo. Lee la siguiente instrucción de la memoria con la ayuda de la IP. Luego, se captan los operandos de la instrucción de la memoria y finalmente se ejecuta la instrucción.
