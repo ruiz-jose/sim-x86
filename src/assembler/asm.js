@@ -47,13 +47,13 @@ app.service('assembler', ['opcodes', function (opcodes) {
             var parseRegister = function (input) {
                 input = input.toUpperCase();
 
-                if (input === 'A') {
+                if (input === 'AL') {
                     return 0;
-                } else if (input === 'B') {
+                } else if (input === 'BL') {
                     return 1;
-                } else if (input === 'C') {
+                } else if (input === 'CL') {
                     return 2;
-                } else if (input === 'D') {
+                } else if (input === 'DL') {
                     return 3;
                 } else if (input === 'SP') {
                     return 4;
@@ -67,13 +67,13 @@ app.service('assembler', ['opcodes', function (opcodes) {
                 var m = 0;
                 var base = 0;
 
-                if (input[0] === 'A') {
+                if (input[0] === 'AL') {
                     base = 0;
-                } else if (input[0] === 'B') {
+                } else if (input[0] === 'BL') {
                     base = 1;
-                } else if (input[0] === 'C') {
+                } else if (input[0] === 'CL') {
                     base = 2;
-                } else if (input[0] === 'D') {
+                } else if (input[0] === 'DL') {
                     base = 3;
                 } else if (input.slice(0, 2) === "SP") {
                     base = 4;
@@ -172,7 +172,7 @@ app.service('assembler', ['opcodes', function (opcodes) {
                 if (upperLabel in normalizedLabels)
                     throw "Duplicate label: " + label;
 
-                if (upperLabel === "A" || upperLabel === "B" || upperLabel === "C" || upperLabel === "D")
+                if (upperLabel === "AL" || upperLabel === "BL" || upperLabel === "CL" || upperLabel === "DL")
                     throw "Label contains keyword: " + upperLabel;
 
                 labels[label] = code.length;

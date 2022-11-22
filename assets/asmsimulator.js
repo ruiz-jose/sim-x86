@@ -48,13 +48,13 @@ var app = angular.module('ASMSimulator', []);
             var parseRegister = function (input) {
                 input = input.toUpperCase();
 
-                if (input === 'A') {
+                if (input === 'AL') {
                     return 0;
-                } else if (input === 'B') {
+                } else if (input === 'BL') {
                     return 1;
-                } else if (input === 'C') {
+                } else if (input === 'CL') {
                     return 2;
-                } else if (input === 'D') {
+                } else if (input === 'DL') {
                     return 3;
                 } else if (input === 'SP') {
                     return 4;
@@ -68,13 +68,13 @@ var app = angular.module('ASMSimulator', []);
                 var m = 0;
                 var base = 0;
 
-                if (input[0] === 'A') {
+                if (input[0] === 'AL') {
                     base = 0;
-                } else if (input[0] === 'B') {
+                } else if (input[0] === 'BL') {
                     base = 1;
-                } else if (input[0] === 'C') {
+                } else if (input[0] === 'CL') {
                     base = 2;
-                } else if (input[0] === 'D') {
+                } else if (input[0] === 'DL') {
                     base = 3;
                 } else if (input.slice(0, 2) === "SP") {
                     base = 4;
@@ -173,7 +173,7 @@ var app = angular.module('ASMSimulator', []);
                 if (upperLabel in normalizedLabels)
                     throw "Duplicate label: " + label;
 
-                if (upperLabel === "A" || upperLabel === "B" || upperLabel === "C" || upperLabel === "D")
+                if (upperLabel === "AL" || upperLabel === "BL" || upperLabel === "CL" || upperLabel === "DL")
                     throw "Label contains keyword: " + upperLabel;
 
                 labels[label] = code.length;
@@ -1366,7 +1366,7 @@ var app = angular.module('ASMSimulator', []);
     $scope.outputStartIndex = 232;
 
    // $scope.code = "; Simple example\n; Writes Hello World to the output\n\n	JMP start\nhello: DB \"Hello World!\" ; Variable\n       DB 0	; String terminator\n\nstart:\n	MOV C, hello    ; Point to var \n	MOV D, 232	; Point to output\n	CALL print\n        HLT             ; Stop execution\n\nprint:			; print(C:*from, D:*to)\n	PUSH A\n	PUSH B\n	MOV B, 0\n.loop:\n	MOV A, [C]	; Get char from var\n	MOV [D], A	; Write to output\n	INC C\n	INC D  \n	CMP B, [C]	; Check if end\n	JNZ .loop	; jump if not\n\n	POP B\n	POP A\n	RET";
-   $scope.code = "; Sintaxis NASM: la instrucción ADD A, [x] --> copia el contenido de memoria RAM dada por x en el registro A, y la instrucción ADD A, x --> copia la direccion de memoria RAM donde se guarda x  \n\n;Ejemplo simple\n; x=3 , y=2, z=0\n;Operación z = y + x\n\nMOV A, [x]    ; copia contenido de x al registro A\nADD A, [y]     ; A = A + y\nMOV [z], A     ; z <-- A\nHLT    ; Detiene ejecución\n\n; Defino Datos\nx: DB 3 ; Variable x=3\ny: DB 2\nz: DB 0";
+   $scope.code = "; Sintaxis NASM: la instrucción ADD AL, [x] --> copia el contenido de memoria RAM dada por x en el registro AL, y la instrucción ADD AL, x --> copia la direccion de memoria RAM donde se guarda x  \n\n;Ejemplo simple\n; x=3 , y=2, z=0\n;Operación z = y + x\n\nMOV AL, [x]    ; copia contenido de x al registro A\nADD AL, [y]     ; A = A + y\nMOV [z], AL     ; z <-- A\nHLT    ; Detiene ejecución\n\n; Defino Datos\nx: DB 3 ; Variable x=3\ny: DB 2\nz: DB 0";
 
     $scope.reset = function () {
         cpu.reset();
