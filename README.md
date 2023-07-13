@@ -1,9 +1,9 @@
-# Arquitectura registro-memoria X86
+# Arquitectura simple X86
 El simulador posee una sintaxis ensamblador NASM y simula el comportadmiento de una CPU x86 de 8 bits.
 
 Press Help inside the simulator to see an overview about the supported instructions.
 
-####<a href="http://ruiz-jose.github.io/arq-registro-x86/index.html" target="_blank">Probar on-line</a>
+####<a href="http://ruiz-jose.github.io/sim-x86/index.html" target="_blank">Probar on-line</a>
 
 ## Caracteristicas
 La computadora virtual consta de los siguientes componentes:
@@ -12,7 +12,7 @@ La computadora virtual consta de los siguientes componentes:
 - Salida de consola. Puede mostrar 24 caracteres y asignará los últimos 24 bytes de la memoria RAM a la salida. Por lo tanto, para que el programa escriba algo en la salida, todo lo que se debe hacer es escribir los datos en los últimos 24 bytes de la memoria. Esto significa mapeo directo a memoria RAM.
 
 ### la cpu
-El corazón del simulador es la CPU. La CPU consta de 4 registros de propósito general ( A, B, C y D ) y su trabajo es mantener los valores necesarios para ejecutar una instrucción ¿Cómo sabe la CPU qué ejecutar? Para ello, utilizamos un puntero de instrucción ( IP ). Técnicamente, la IP es solo otro registro con alguna funcionalidad adicional. La IP mantiene la ubicación de la siguiente instrucción en la memoria y en cada ciclo de la CPU, la CPU toma esta instrucción y la ejecuta.
+El corazón del simulador es la CPU. La CPU consta de 4 registros de propósito general ( AL, BL, CL y DL ) y su trabajo es mantener los valores necesarios para ejecutar una instrucción ¿Cómo sabe la CPU qué ejecutar? Para ello, utilizamos un puntero de instrucción ( IP ). Técnicamente, la IP es solo otro registro con alguna funcionalidad adicional. La IP mantiene la ubicación de la siguiente instrucción en la memoria y en cada ciclo de la CPU, la CPU toma esta instrucción y la ejecuta.
 
 Si bien esta pequeña funcionalidad es suficiente para ejecutar algunos programas, no es suficiente para ejecutar ningún tipo de programa. Por ejemplo, para proporcionar la funcionalidad IF-then-else, la CPU necesita tomar una decisión basada en el resultado de la instrucción ejecutada previamente. Esos resultados se almacenan en banderas de 1 bit. Nuestra CPU contendrá tres banderas diferentes:
 
@@ -23,7 +23,7 @@ Si bien esta pequeña funcionalidad es suficiente para ejecutar algunos programa
 Por último, pero no menos importante, actualizamos nuestra CPU con un registro de puntero de pila. El puntero de pila ( SP ) como el nombre ya da puntos a la posición actual de la pila en la memoria. Puede ser incrementado y decrementado por el programa para almacenar datos e implementar funciones.
 
 ### Formato de instruccion
-Por lo general una instrucción contiene el código de operación y sus operandos (parámetros). El primer operando suele ser el destino y el segundo es la fuente. Si una instrucción tiene solo un operando, este operando es destino y fuente a la vez.
+Por lo general una instrucción contiene el código de operación y sus operandos (parámetros). El primer operando suele ser el destino y el segundo es la fuente. 
 
 Por ejemplo: 
 [Opcode] [Operand1] [Operand2]
