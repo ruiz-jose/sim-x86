@@ -2,12 +2,13 @@ app.service('cpu', ['opcodes', 'memory', function(opcodes, memory) {
     var cpu = {
         step: function() {
             var self = this;
-
+           
             if (self.fault === true) {
                 throw "FAULT. Reset to continue.";
             }
 
             try {
+                
                 var checkGPR = function(reg) {
                     if (reg < 0 || reg >= self.gpr.length) {
                         throw "Invalid register: " + reg;
@@ -167,7 +168,7 @@ app.service('cpu', ['opcodes', 'memory', function(opcodes, memory) {
                         break;
                     case opcodes.MOV_NUMBER_TO_ADDRESS:
                         memTo = memory.load(++self.ip);
-                        number = memory.load(++self.ip);
+                        number = memory.loadself.ip(++self.ip);
                         memory.store(memTo, number);
                         self.ip++;
                         break;
@@ -569,7 +570,25 @@ app.service('cpu', ['opcodes', 'memory', function(opcodes, memory) {
                     default:
                         throw "Invalid op code: " + instr;
                 }
-
+                self.instruction = instr;
+                self.cycle++;
+                self.saveHistory(self.cycle);
+                return true;
+            } catch(e) {
+                self.fault = true;
+                throw e;
+            }
+        },
+        back: function() {
+            var self = this;
+            if (self.fault === true) {
+                throw "FAULT. Reset to continue.";
+            }
+            try {
+                if (self.history[self.cycle - 1]) {
+                    self.cycle--;
+                    self.timeMachine(self.cycle);
+                }
                 return true;
             } catch(e) {
                 self.fault = true;
@@ -587,9 +606,46 @@ app.service('cpu', ['opcodes', 'memory', function(opcodes, memory) {
             self.zero = false;
             self.carry = false;
             self.fault = false;
+
+            cpu.history = [];
+            cpu.cycle       = 0;
+            cpu.instruction = 0;
+        },
+        saveHistory: function(cycle) {
+            var self = this;
+            self.history[cycle] = {
+                Memory:      memory.data.slice(),
+                ip:          self.ip,
+                sp:          self.sp,
+                Register:    self.gpr.slice(),
+                cycle:       self.cycle,
+                instruction: self.instruction,
+                zero:        self.zero,
+                carry:       self.carry,
+                fault:       self.fault
+            };
+            //console.log(self.history[cycle]);
+            //console.log(self.history[cycle].Register);
+        },
+        timeMachine: function(cycle) {
+            var self = this;
+            memory.data = self.history[cycle].Memory.slice();
+            self.ip          = self.history[cycle].ip;
+            self.sp          = self.history[cycle].sp;
+            self.gpr         = self.history[cycle].Register.slice();
+            self.instruction = self.history[cycle].instruction;
+            self.cycle       = self.history[cycle].cycle;
+            self.zero        = self.history[cycle].zero;
+            self.carry       = self.history[cycle].carry;
+            self.fault       = self.history[cycle].fault;
+            
+            //console.log(self.history[cycle]);
+            //console.log(self.history[cycle].Register);
+            //console.log(cycle);
+            //console.log(self.history.length);
+            //console.log(self.gpr);
         }
     };
-
     cpu.reset();
     return cpu;
 }]);

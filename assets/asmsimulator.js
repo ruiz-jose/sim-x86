@@ -639,12 +639,13 @@ var app = angular.module('ASMSimulator', []);
     var cpu = {
         step: function() {
             var self = this;
-
+           
             if (self.fault === true) {
                 throw "FAULT. Reset to continue.";
             }
 
             try {
+                
                 var checkGPR = function(reg) {
                     if (reg < 0 || reg >= self.gpr.length) {
                         throw "Invalid register: " + reg;
@@ -804,7 +805,7 @@ var app = angular.module('ASMSimulator', []);
                         break;
                     case opcodes.MOV_NUMBER_TO_ADDRESS:
                         memTo = memory.load(++self.ip);
-                        number = memory.load(++self.ip);
+                        number = memory.loadself.ip(++self.ip);
                         memory.store(memTo, number);
                         self.ip++;
                         break;
@@ -1206,7 +1207,25 @@ var app = angular.module('ASMSimulator', []);
                     default:
                         throw "Invalid op code: " + instr;
                 }
-
+                self.instruction = instr;
+                self.cycle++;
+                self.saveHistory(self.cycle);
+                return true;
+            } catch(e) {
+                self.fault = true;
+                throw e;
+            }
+        },
+        back: function() {
+            var self = this;
+            if (self.fault === true) {
+                throw "FAULT. Reset to continue.";
+            }
+            try {
+                if (self.history[self.cycle - 1]) {
+                    self.cycle--;
+                    self.timeMachine(self.cycle);
+                }
                 return true;
             } catch(e) {
                 self.fault = true;
@@ -1224,9 +1243,46 @@ var app = angular.module('ASMSimulator', []);
             self.zero = false;
             self.carry = false;
             self.fault = false;
+
+            cpu.history = [];
+            cpu.cycle       = 0;
+            cpu.instruction = 0;
+        },
+        saveHistory: function(cycle) {
+            var self = this;
+            self.history[cycle] = {
+                Memory:      memory.data.slice(),
+                ip:          self.ip,
+                sp:          self.sp,
+                Register:    self.gpr.slice(),
+                cycle:       self.cycle,
+                instruction: self.instruction,
+                zero:        self.zero,
+                carry:       self.carry,
+                fault:       self.fault
+            };
+            //console.log(self.history[cycle]);
+            //console.log(self.history[cycle].Register);
+        },
+        timeMachine: function(cycle) {
+            var self = this;
+            memory.data = self.history[cycle].Memory.slice();
+            self.ip          = self.history[cycle].ip;
+            self.sp          = self.history[cycle].sp;
+            self.gpr         = self.history[cycle].Register.slice();
+            self.instruction = self.history[cycle].instruction;
+            self.cycle       = self.history[cycle].cycle;
+            self.zero        = self.history[cycle].zero;
+            self.carry       = self.history[cycle].carry;
+            self.fault       = self.history[cycle].fault;
+            
+            //console.log(self.history[cycle]);
+            //console.log(self.history[cycle].Register);
+            //console.log(cycle);
+            //console.log(self.history.length);
+            //console.log(self.gpr);
         }
     };
-
     cpu.reset();
     return cpu;
 }]);
@@ -1364,6 +1420,8 @@ var app = angular.module('ASMSimulator', []);
                      {speed: 16, desc: "16 HZ"}];
     $scope.speed = 4;
     $scope.outputStartIndex = 232;
+    $scope.title = ['00', '01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12', '13', '14', '15'];
+
 
    // $scope.code = "; Simple example\n; Writes Hello World to the output\n\n	JMP start\nhello: DB \"Hello World!\" ; Variable\n       DB 0	; String terminator\n\nstart:\n	MOV C, hello    ; Point to var \n	MOV D, 232	; Point to output\n	CALL print\n        HLT             ; Stop execution\n\nprint:			; print(C:*from, D:*to)\n	PUSH A\n	PUSH B\n	MOV B, 0\n.loop:\n	MOV A, [C]	; Get char from var\n	MOV [D], A	; Write to output\n	INC C\n	INC D  \n	CMP B, [C]	; Check if end\n	JNZ .loop	; jump if not\n\n	POP B\n	POP A\n	RET";
    $scope.code = "; Sintaxis NASM: un operando en [] se refiere a contenido de memoria, por ejemplo ADD AL, [x] --> copia el contenido de memoria apuntada por x en el registro AL, sin embargo la instrucción ADD AL, x --> copia la direccion de memoria donde se guarda x  \n\n;Ejemplo simple\n; x=3 , y=2, z=0\n;Operación z = y + x\n\nMOV AL, [x]    ; copia contenido de x al registro A\nADD AL, [y]     ; A = A + y\nMOV [z], AL     ; z <-- A\nHLT    ; Detiene ejecución\n\n; Definicion Datos\nx: DB 3 ; Variable x=3\ny: DB 2\nz: DB 0";
@@ -1375,20 +1433,26 @@ var app = angular.module('ASMSimulator', []);
         $scope.selectedLine = -1;
     };
 
-    $scope.executeStep = function () {
+
+    $scope.executeStep = function (value) {
         if (!$scope.checkPrgrmLoaded()) {
             $scope.assemble();
         }
 
         try {
-            // Execute
-            var res = cpu.step();
-
+            var res = false;
+            if (value === 'back'){
+                res = cpu.back();
+            }else{
+                // Execute
+                res = cpu.step();
+            }
+            
             // Mark in code
             if (cpu.ip in $scope.mapping) {
                 $scope.selectedLine = $scope.mapping[cpu.ip];
             }
-
+            
             return res;
         } catch (e) {
             $scope.error = e;
@@ -1440,7 +1504,7 @@ var app = angular.module('ASMSimulator', []);
     $scope.assemble = function () {
         try {
             $scope.reset();
-
+            
             var assembly = assembler.go($scope.code);
             $scope.mapping = assembly.mapping;
             var binary = assembly.code;
@@ -1452,6 +1516,7 @@ var app = angular.module('ASMSimulator', []);
             for (var i = 0, l = binary.length; i < l; i++) {
                 memory.data[i] = binary[i];
             }
+            cpu.saveHistory(0);
         } catch (e) {
             if (e.line !== undefined) {
                 $scope.error = e.line + " | " + e.error;
