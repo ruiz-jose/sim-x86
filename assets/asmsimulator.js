@@ -230,19 +230,19 @@ var app = angular.module('ASMSimulator', []);
                                     if (p1.type === "register" && p2.type === "register")
                                         opCode = opcodes.MOV_REG_TO_REG;
                                     else if (p1.type === "register" && p2.type === "address")
-                                        opCode = opcodes.MOV_ADDRESS_TO_REG;
-                                    else if (p1.type === "register" && p2.type === "regaddress")
-                                        opCode = opcodes.MOV_REGADDRESS_TO_REG;
-                                    else if (p1.type === "address" && p2.type === "register")
                                         opCode = opcodes.MOV_REG_TO_ADDRESS;
-                                    else if (p1.type === "regaddress" && p2.type === "register")
+                                    else if (p1.type === "register" && p2.type === "regaddress")
                                         opCode = opcodes.MOV_REG_TO_REGADDRESS;
                                     else if (p1.type === "register" && p2.type === "number")
-                                        opCode = opcodes.MOV_NUMBER_TO_REG;
+                                        opCode = opcodes.MOV_REG_TO_NUMBER;
+                                    else if (p1.type === "address" && p2.type === "register")
+                                        opCode = opcodes.MOV_ADDRESS_TO_REG;
+                                    else if (p1.type === "regaddress" && p2.type === "register")
+                                        opCode = opcodes.MOV_REGADDRESS_TO_REG;
                                     else if (p1.type === "address" && p2.type === "number")
-                                        opCode = opcodes.MOV_NUMBER_TO_ADDRESS;
+                                        opCode = opcodes.MOV_ADDRESS_TO_NUMBER;
                                     else if (p1.type === "regaddress" && p2.type === "number")
-                                        opCode = opcodes.MOV_NUMBER_TO_REGADDRESS;
+                                        opCode = opcodes.MOV_REGADDRESS_TO_NUMBER;
                                     else
                                         throw "MOV does not support this operands";
 
@@ -254,12 +254,20 @@ var app = angular.module('ASMSimulator', []);
 
                                     if (p1.type === "register" && p2.type === "register")
                                         opCode = opcodes.ADD_REG_TO_REG;
-                                    else if (p1.type === "register" && p2.type === "regaddress")
-                                        opCode = opcodes.ADD_REGADDRESS_TO_REG;
                                     else if (p1.type === "register" && p2.type === "address")
-                                        opCode = opcodes.ADD_ADDRESS_TO_REG;
+                                        opCode = opcodes.ADD_REG_TO_ADDRESS;
+                                    else if (p1.type === "register" && p2.type === "regaddress")
+                                        opCode = opcodes.ADD_REG_TO_REGADDRESS;
                                     else if (p1.type === "register" && p2.type === "number")
-                                        opCode = opcodes.ADD_NUMBER_TO_REG;
+                                        opCode = opcodes.ADD_REG_TO_NUMBER;
+                                    else if (p1.type === "address" && p2.type === "register")
+                                        opCode = opcodes.ADD_ADDRESS_TO_REG;
+                                    else if (p1.type === "regaddress" && p2.type === "register")
+                                        opCode = opcodes.ADD_REGADDRESS_TO_REG;
+                                    else if (p1.type === "address" && p2.type === "number")
+                                        opCode = opcodes.ADD_ADDRESS_TO_NUMBER;
+                                    else if (p1.type === "regaddress" && p2.type === "number")
+                                        opCode = opcodes.ADD_REGADDRESS_TO_NUMBER;
                                     else
                                         throw "ADD does not support this operands";
 
@@ -271,12 +279,20 @@ var app = angular.module('ASMSimulator', []);
 
                                     if (p1.type === "register" && p2.type === "register")
                                         opCode = opcodes.SUB_REG_FROM_REG;
-                                    else if (p1.type === "register" && p2.type === "regaddress")
-                                        opCode = opcodes.SUB_REGADDRESS_FROM_REG;
                                     else if (p1.type === "register" && p2.type === "address")
-                                        opCode = opcodes.SUB_ADDRESS_FROM_REG;
+                                        opCode = opcodes.SUB_REG_TO_ADDRESS;
+                                    else if (p1.type === "register" && p2.type === "regaddress")
+                                        opCode = opcodes.SUB_REG_TO_REGADDRESS;
                                     else if (p1.type === "register" && p2.type === "number")
-                                        opCode = opcodes.SUB_NUMBER_FROM_REG;
+                                        opCode = opcodes.SUB_REG_TO_NUMBER;
+                                    else if (p1.type === "address" && p2.type === "register")
+                                        opCode = opcodes.SUB_ADDRESS_TO_REG;
+                                    else if (p1.type === "regaddress" && p2.type === "register")
+                                        opCode = opcodes.SUB_REGADDRESS_TO_REG;
+                                    else if (p1.type === "address" && p2.type === "number")
+                                        opCode = opcodes.SUB_ADDRESS_TO_NUMBER;
+                                    else if (p1.type === "regaddress" && p2.type === "number")
+                                        opCode = opcodes.SUB_REGADDRESS_TO_NUMBER;
                                     else
                                         throw "SUB does not support this operands";
 
@@ -773,43 +789,43 @@ var app = angular.module('ASMSimulator', []);
                         setGPR_SP(regTo,getGPR_SP(regFrom));
                         self.ip++;
                         break;
-                    case opcodes.MOV_ADDRESS_TO_REG:
+                    case opcodes.MOV_REG_TO_ADDRESS:
                         regTo = checkGPR_SP(memory.load(++self.ip));
                         memFrom = memory.load(++self.ip);
                         setGPR_SP(regTo,memory.load(memFrom));
                         self.ip++;
                         break;
-                    case opcodes.MOV_REGADDRESS_TO_REG:
+                    case opcodes.MOV_REG_TO_REGADDRESS:
                         regTo = checkGPR_SP(memory.load(++self.ip));
                         regFrom = memory.load(++self.ip);
                         setGPR_SP(regTo,memory.load(indirectRegisterAddress(regFrom)));
                         self.ip++;
                         break;
-                    case opcodes.MOV_REG_TO_ADDRESS:
-                        memTo = memory.load(++self.ip);
-                        regFrom = checkGPR_SP(memory.load(++self.ip));
-                        memory.store(memTo, getGPR_SP(regFrom));
-                        self.ip++;
-                        break;
-                    case opcodes.MOV_REG_TO_REGADDRESS:
-                        regTo = memory.load(++self.ip);
-                        regFrom = checkGPR_SP(memory.load(++self.ip));
-                        memory.store(indirectRegisterAddress(regTo), getGPR_SP(regFrom));
-                        self.ip++;
-                        break;
-                    case opcodes.MOV_NUMBER_TO_REG:
+                    case opcodes.MOV_REG_TO_NUMBER:
                         regTo = checkGPR_SP(memory.load(++self.ip));
                         number = memory.load(++self.ip);
                         setGPR_SP(regTo,number);
                         self.ip++;
                         break;
-                    case opcodes.MOV_NUMBER_TO_ADDRESS:
+                    case opcodes.MOV_ADDRESS_TO_REG:
+                        memTo = memory.load(++self.ip);
+                        regFrom = checkGPR_SP(memory.load(++self.ip));
+                        memory.store(memTo, getGPR_SP(regFrom));
+                        self.ip++;
+                        break;
+                    case opcodes.MOV_REGADDRESS_TO_REG:
+                        regTo = memory.load(++self.ip);
+                        regFrom = checkGPR_SP(memory.load(++self.ip));
+                        memory.store(indirectRegisterAddress(regTo), getGPR_SP(regFrom));
+                        self.ip++;
+                        break;
+                    case opcodes.MOV_ADDRESS_TO_NUMBER:
                         memTo = memory.load(++self.ip);
                         number = memory.loadself.ip(++self.ip);
                         memory.store(memTo, number);
                         self.ip++;
                         break;
-                    case opcodes.MOV_NUMBER_TO_REGADDRESS:
+                    case opcodes.MOV_REGADDRESS_TO_NUMBER:
                         regTo = memory.load(++self.ip);
                         number = memory.load(++self.ip);
                         memory.store(indirectRegisterAddress(regTo), number);
@@ -821,46 +837,94 @@ var app = angular.module('ASMSimulator', []);
                         setGPR_SP(regTo,checkOperation(getGPR_SP(regTo) + getGPR_SP(regFrom)));
                         self.ip++;
                         break;
-                    case opcodes.ADD_REGADDRESS_TO_REG:
-                        regTo = checkGPR_SP(memory.load(++self.ip));
-                        regFrom = memory.load(++self.ip);
-                        setGPR_SP(regTo,checkOperation(getGPR_SP(regTo) + memory.load(indirectRegisterAddress(regFrom))));
-                        self.ip++;
-                        break;
-                    case opcodes.ADD_ADDRESS_TO_REG:
+                    case opcodes.ADD_REG_TO_ADDRESS:
                         regTo = checkGPR_SP(memory.load(++self.ip));
                         memFrom = memory.load(++self.ip);
                         setGPR_SP(regTo,checkOperation(getGPR_SP(regTo) + memory.load(memFrom)));
                         self.ip++;
                         break;
-                    case opcodes.ADD_NUMBER_TO_REG:
+                    case opcodes.ADD_REG_TO_REGADDRESS:
+                        regTo = checkGPR_SP(memory.load(++self.ip));
+                        regFrom = memory.load(++self.ip);
+                        setGPR_SP(regTo,checkOperation(getGPR_SP(regTo) + memory.load(indirectRegisterAddress(regFrom))));
+                        self.ip++;
+                        break;
+                    case opcodes.ADD_REG_TO_NUMBER:
                         regTo = checkGPR_SP(memory.load(++self.ip));
                         number = memory.load(++self.ip);
                         setGPR_SP(regTo,checkOperation(getGPR_SP(regTo) + number));
                         self.ip++;
                         break;
-                    case opcodes.SUB_REG_FROM_REG:
+                    case opcodes.ADD_ADDRESS_TO_REG:
+                        memTo = memory.load(++self.ip);
+                        regFrom = checkGPR_SP(memory.load(++self.ip));
+                        memory.store(memTo,checkOperation(memory.load(memTo) + getGPR_SP(regFrom)));
+                        self.ip++;
+                        break;
+                    case opcodes.ADD_REGADDRESS_TO_REG:
+                        regTo = memory.load(++self.ip);
+                        regFrom = checkGPR_SP(memory.load(++self.ip));
+                        memory.store(indirectRegisterAddress(regTo),checkOperation(memory.load(indirectRegisterAddress(regTo)) + getGPR_SP(regFrom)));
+                        self.ip++;
+                        break;
+                    case opcodes.ADD_ADDRESS_TO_NUMBER:
+                        memTo = memory.load(++self.ip);
+                        number = memory.loadself.ip(++self.ip);
+                        memory.store(memTo, checkOperation(memory.load(memTo) + number));
+                        self.ip++;
+                        break;
+                    case opcodes.ADD_REGADDRESS_TO_NUMBER:
+                        regTo = memory.load(++self.ip);
+                        number = memory.load(++self.ip);
+                        memory.store(indirectRegisterAddress(regTo),checkOperation(memory.load(regTo) + number));
+                        self.ip++;
+                        break;
+                    case opcodes.SUB_REG_TO_REG:
                         regTo = checkGPR_SP(memory.load(++self.ip));
                         regFrom = checkGPR_SP(memory.load(++self.ip));
                         setGPR_SP(regTo,checkOperation(getGPR_SP(regTo) - self.gpr[regFrom]));
                         self.ip++;
                         break;
-                    case opcodes.SUB_REGADDRESS_FROM_REG:
-                        regTo = checkGPR_SP(memory.load(++self.ip));
-                        regFrom = memory.load(++self.ip);
-                        setGPR_SP(regTo,checkOperation(getGPR_SP(regTo) - memory.load(indirectRegisterAddress(regFrom))));
-                        self.ip++;
-                        break;
-                    case opcodes.SUB_ADDRESS_FROM_REG:
+                    case opcodes.SUB_REG_TO_ADDRESS:
                         regTo = checkGPR_SP(memory.load(++self.ip));
                         memFrom = memory.load(++self.ip);
                         setGPR_SP(regTo,checkOperation(getGPR_SP(regTo) - memory.load(memFrom)));
                         self.ip++;
                         break;
-                    case opcodes.SUB_NUMBER_FROM_REG:
+                    case opcodes.SUB_REG_TO_REGADDRESS:
+                        regTo = checkGPR_SP(memory.load(++self.ip));
+                        regFrom = memory.load(++self.ip);
+                        setGPR_SP(regTo,checkOperation(getGPR_SP(regTo) - memory.load(indirectRegisterAddress(regFrom))));
+                        self.ip++;
+                        break;
+                    case opcodes.SUB_REG_TO_NUMBER:
                         regTo = checkGPR_SP(memory.load(++self.ip));
                         number = memory.load(++self.ip);
                         setGPR_SP(regTo,checkOperation(getGPR_SP(regTo) - number));
+                        self.ip++;
+                        break;
+                    case opcodes.SUB_ADDRESS_TO_REG:
+                        memTo = memory.load(++self.ip);
+                        regFrom = checkGPR_SP(memory.load(++self.ip));
+                        memory.store(memTo,checkOperation(memory.load(memTo) - getGPR_SP(regFrom)));
+                        self.ip++;
+                        break;
+                    case opcodes.SUB_REGADDRESS_TO_REG:
+                        regTo = memory.load(++self.ip);
+                        regFrom = checkGPR_SP(memory.load(++self.ip));
+                        memory.store(indirectRegisterAddress(regTo),checkOperation(memory.load(indirectRegisterAddress(regTo)) - getGPR_SP(regFrom)));
+                        self.ip++;
+                        break;
+                    case opcodes.SUB_ADDRESS_TO_NUMBER:
+                        memTo = memory.load(++self.ip);
+                        number = memory.loadself.ip(++self.ip);
+                        memory.store(memTo, checkOperation(memory.load(memTo) - number));
+                        self.ip++;
+                        break;
+                    case opcodes.SUB_REGADDRESS_TO_NUMBER:
+                        regTo = memory.load(++self.ip);
+                        number = memory.load(++self.ip);
+                        memory.store(indirectRegisterAddress(regTo),checkOperation(memory.load(regTo) - number));
                         self.ip++;
                         break;
                     case opcodes.INC_REG:
@@ -1327,27 +1391,33 @@ var app = angular.module('ASMSimulator', []);
     var opcodes = {
         NONE: 0,
         MOV_REG_TO_REG: 1,
-        MOV_ADDRESS_TO_REG: 2,
-        MOV_REGADDRESS_TO_REG: 3,
-        MOV_REG_TO_ADDRESS: 4,
-        MOV_REG_TO_REGADDRESS: 5,
-        MOV_NUMBER_TO_REG: 6,
-        MOV_NUMBER_TO_ADDRESS: 7,
-        MOV_NUMBER_TO_REGADDRESS: 8,
-        ADD_REG_TO_REG: 10,
-        ADD_REGADDRESS_TO_REG: 11,
-        ADD_ADDRESS_TO_REG: 12,
-        ADD_NUMBER_TO_REG: 13,
-        SUB_REG_FROM_REG: 14,
-        SUB_REGADDRESS_FROM_REG: 15,
-        SUB_ADDRESS_FROM_REG: 16,
-        SUB_NUMBER_FROM_REG: 17,
-        INC_REG: 18,
-        DEC_REG: 19,
-        CMP_REG_WITH_REG: 20,
-        CMP_REGADDRESS_WITH_REG: 21,
-        CMP_ADDRESS_WITH_REG: 22,
-        CMP_NUMBER_WITH_REG: 23,
+        MOV_REG_TO_ADDRESS: 2,
+        MOV_REG_TO_REGADDRESS: 3,
+        MOV_REG_TO_NUMBER: 4,
+        MOV_ADDRESS_TO_REG: 5,
+        MOV_REGADDRESS_TO_REG: 6,
+        MOV_ADDRESS_TO_NUMBER: 7,
+        MOV_REGADDRESS_TO_NUMBER: 8,
+        ADD_REG_TO_REG: 9,
+        ADD_REG_TO_ADDRESS: 10,
+        ADD_REG_TO_REGADDRESS: 11,
+        ADD_REG_TO_NUMBER: 12,
+        ADD_ADDRESS_TO_REG: 13,
+        ADD_REGADDRESS_TO_REG: 14,
+        ADD_ADDRESS_TO_NUMBER: 15,
+        ADD_REGADDRESS_TO_NUMBER: 16,
+        SUB_REG_TO_REG: 17,
+        SUB_REG_TO_ADDRESS: 18,
+        SUB_REG_TO_REGADDRESS: 19,
+        SUB_REG_TO_NUMBER: 20,
+        SUB_ADDRESS_TO_REG: 21,
+        SUB_REGADDRESS_TO_REG: 22,
+        SUB_ADDRESS_TO_NUMBER: 23,
+        SUB_REGADDRESS_TO_NUMBER: 24,
+        CMP_REG_WITH_REG: 25,
+        CMP_REGADDRESS_WITH_REG: 26,
+        CMP_ADDRESS_WITH_REG: 27,
+        CMP_NUMBER_WITH_REG: 28,
         JMP_REGADDRESS: 30,
         JMP_ADDRESS: 31,
         JC_REGADDRESS: 32,
@@ -1362,6 +1432,8 @@ var app = angular.module('ASMSimulator', []);
         JA_ADDRESS: 41,
         JNA_REGADDRESS: 42,
         JNA_ADDRESS: 43,
+        INC_REG: 44,
+        DEC_REG: 45,
         PUSH_REG: 50,
         PUSH_REGADDRESS: 51,
         PUSH_ADDRESS: 52,
@@ -1424,7 +1496,7 @@ var app = angular.module('ASMSimulator', []);
 
 
    // $scope.code = "; Simple example\n; Writes Hello World to the output\n\n	JMP start\nhello: DB \"Hello World!\" ; Variable\n       DB 0	; String terminator\n\nstart:\n	MOV C, hello    ; Point to var \n	MOV D, 232	; Point to output\n	CALL print\n        HLT             ; Stop execution\n\nprint:			; print(C:*from, D:*to)\n	PUSH A\n	PUSH B\n	MOV B, 0\n.loop:\n	MOV A, [C]	; Get char from var\n	MOV [D], A	; Write to output\n	INC C\n	INC D  \n	CMP B, [C]	; Check if end\n	JNZ .loop	; jump if not\n\n	POP B\n	POP A\n	RET";
-   $scope.code = "; Sintaxis NASM: un operando en [] se refiere a contenido de memoria, por ejemplo ADD AL, [x] --> copia el contenido de memoria apuntada por x en el registro AL, sin embargo la instrucción ADD AL, x --> copia la direccion de memoria donde se guarda x  \n\n;Ejemplo simple\n; x=3 , y=2, z=0\n;Operación z = y + x \n\n; sección de datos\nx: DB 3 ; Variable x=3\ny: DB 2\nz: DB 0\n\n ; sección de código\nMOV AL, [x]    ; copia contenido de x al registro AL\nADD AL, [y]     ; A = A + y\nMOV [z], AL     ; z <-- A\nHLT    ; Detiene ejecución";
+   $scope.code = "; Sintaxis NASM: un operando en [] se refiere a contenido de memoria, por ejemplo ADD AL, [x] --> copia el contenido de memoria apuntada por x en el registro AL, sin embargo la instrucción ADD AL, x --> copia la dirección de memoria donde se guarda x  \n\n;Ejemplo simple\n; x=3 , y=2, z=0\n;Operación z = y + x \n\n; sección de datos\nx: DB 3 ; Variable x=3\ny: DB 2\nz: DB 0\n\n ; sección de código\nMOV AL, [x]    ; copia contenido de x al registro AL\nADD AL, [y]     ; AL = AL + y\nMOV [z], AL     ; z <-- AL\nHLT    ; Detiene ejecución";
 
     $scope.reset = function () {
         cpu.reset();
