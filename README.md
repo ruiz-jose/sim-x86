@@ -44,6 +44,7 @@ Una instruccion con dos operandos requiere 3 bytes de memoria, 1 para el codigo 
 
 ## Para desplegar
 Instalar <a href="http://www.gruntjs.com/" target="_blank">Grunt</a>.
+npm install -g grunt-cli
 Run `grunt` para construir el proyecto.
 
 ## Background
