@@ -32,8 +32,6 @@ ADD     reg,       reg
 
 ADD     reg,       [address]
 
-ADD     reg,       address
-
 ADD     reg,       constant
 
 
